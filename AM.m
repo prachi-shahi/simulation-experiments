@@ -12,14 +12,14 @@ t = (0:L-1)/Fs;
 
 fc = 20e3;          % Carrier frequency
 Ac = 1.5;           % Carrier - 3Vp-p
-c = Ac*sin(2*pi*fc*t);
+c = Ac*cos(2*pi*fc*t);
 figure;
 plot(t,c);
 title('Carrier'); xlabel('Time (s)'); ylabel('Amplitude (V)');
 
 fm = 1e3;          % Message frequency
 Am = 1;            % Message - 2Vp-p
-m = Am*sin(2*pi*fm*t);
+m = Am*cos(2*pi*fm*t);
 figure;
 plot(t,m);
 title('Modulating Signal'); xlabel('Time (s)'); ylabel('Amplitude (V)');
@@ -29,4 +29,29 @@ am = (1+mod_index*m).*c;
 figure;
 plot(t,am);
 title('Amplitude Modulated Signal'); xlabel('Time (s)'); ylabel('Amplitude (V)');
+
+
+%   SYNCHRONOUS DEMODULATION
+
+% The recieved AM signal is multiplied with the carrier and then passed
+% through a low pass filter with cutoff frequency greater than the maximum
+% frequency in the message and less than the carrier frequency to get the 
+% message signal.
+
+c_r = cos(2*pi*fc*t);       % cos(wct) at the receiver
+x = c_r.*am;
+% Low pass filter with cutoff frequency 1.5kHz
+n = 50;
+Wn = 1.5e3/(Fs/2);
+b = fir1(n,Wn);
+output = filter(b,1,x);
+figure;
+plot(t,output);
+title('Demodulated Signal'); xlabel('Time (s)'); ylabel('Amplitude (V)');
+
+
+
+
+
+
 
