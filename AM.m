@@ -47,11 +47,26 @@ b = fir1(n,Wn);
 output = filter(b,1,x);
 figure;
 plot(t,output);
-title('Demodulated Signal'); xlabel('Time (s)'); ylabel('Amplitude (V)');
+title('Synchronously Demodulated Signal'); xlabel('Time (s)'); ylabel('Amplitude (V)');
 
 
+%   NON-COHERENT DETECTION
 
+Vc(1) = 0;                              % initial capacitor voltage
+for i = 2:length(am)
+    if am(i) > Vc(i-1)                   % diode on (charging)
+        Vc(i) = am(i);
+    else                                % diode off (discharging)
+        Vc(i) = Vc(i-1) - 0.0023*Vc(i-1);
+    end
+end
 
-
+n = 50;
+Wn = 1.5e3/(Fs/2);                      % 1.5kHz cutoff frequency
+b = fir1(n,Wn);
+output = filter(b,1,Vc);
+figure;
+plot(t, Vc);
+title('Envelope Detector Output'); xlabel('Time (s)'); ylabel('Amplitude (V)');
 
 
