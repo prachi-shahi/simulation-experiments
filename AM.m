@@ -57,7 +57,7 @@ for i = 2:length(am)
     if am(i) > Vc(i-1)                   % diode on (charging)
         Vc(i) = am(i);
     else                                % diode off (discharging)
-        Vc(i) = Vc(i-1) - 0.0023*Vc(i-1);
+        Vc(i) = Vc(i-1)*exp(-0.0025);
     end
 end
 
