@@ -40,9 +40,11 @@ end
 figure;
 stairs(out1);
 axis([0 N+1 -1.2 1.2]);
+title('PN Sequence 1');
 figure;
 stairs(out2);
 axis([0 N+1 -1.2 1.2]);
+title('PN Sequence 2');
 
 %   AUTOCORRELATION
 
@@ -63,11 +65,12 @@ figure;
 plot(R);
 title('Autocorrelation');
 
+%   CROSS-CORRELATION
+
+for i = 1:N-1
+    A(i) = (1/N)*sum(out2(1,1:N).*C(i,1:N));
+end
+
 figure;
-acf1 = autocorr(out1);
-plot(acf1);
-axis([1 25 0 1.2]);
-figure;
-acf2 = autocorr(out2);
-plot(acf2);
-axis([1 25 0 1.2]);
+plot(A);
+title('Cross-correlation');
