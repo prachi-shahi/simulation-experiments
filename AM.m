@@ -45,9 +45,15 @@ n = 50;
 Wn = 1.5e3/(Fs/2);
 b = fir1(n,Wn);
 output = filter(b,1,x);
+DC = mean(output);
+output = output-DC;
+peak = max(output);
+output = (1/peak)*output;
 figure;
 plot(t,output);
 title('Synchronously Demodulated Signal'); xlabel('Time (s)'); ylabel('Amplitude (V)');
+hold on
+plot(t,m,'r');
 
 
 %   NON-COHERENT DETECTION
@@ -61,12 +67,18 @@ for i = 2:length(am)
     end
 end
 
-n = 50;
+n = 100;
 Wn = 1.5e3/(Fs/2);                      % 1.5kHz cutoff frequency
 b = fir1(n,Wn);
 output = filter(b,1,Vc);
+DC = mean(output);
+output = output-DC;
+peak = max(output);
+output = (1/peak)*output;
 figure;
-plot(t, Vc);
+plot(t, output);
 title('Envelope Detector Output'); xlabel('Time (s)'); ylabel('Amplitude (V)');
+hold on
+plot(t,m,'r');
 
 
